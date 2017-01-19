@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">SMON7ExperimentServerTest</string>
+
+    <string name="msg_no_internet">Geen verbinding</string>
+    <string name="create_target_error_title">Verbindingsfout</string>
+    <string name="create_target_error_message">Er ging iets mis bij het aanmaken van de target.</string>
+</resources>
