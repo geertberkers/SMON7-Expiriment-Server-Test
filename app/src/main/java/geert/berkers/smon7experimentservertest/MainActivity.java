@@ -20,12 +20,16 @@ import java.io.ByteArrayOutputStream;
 
 public class MainActivity extends AppCompatActivity {
 
+    private final static int TARGET_COUNT = 1;
+
     private final static int GAME_ID = 999;
     private final static String NAME = "Target";
     private final static String QR_CODE_NAME = "ServerTest";
 
     private String base64Image;
     private int targetsAdded = 0;
+
+    private long start;
 
     private Button post;
     private TextView result;
@@ -60,21 +64,23 @@ public class MainActivity extends AppCompatActivity {
         String targetName = NAME + targetsAdded;
         String qrCode = QR_CODE_NAME + targetsAdded;
 
-        final long start = System.currentTimeMillis();
 
         QueueController.getInstance(this).add(new AddTargetRequest(GAME_ID, targetName, base64Image, qrCode, new Response.Listener<Target>() {
             @Override
             public void onResponse(Target response) {
-                // Calculate duration of post method!
-                long end = System.currentTimeMillis();
-                long duration = end - start;
-
                 //Increase targets added!
                 targetsAdded++;
 
-                // Show information
-                post.setEnabled(true);
-                result.setText("Responsetime: " + duration + " milliseconds");
+                result.setText("Responses: " + targetsAdded);
+
+                if (targetsAdded == TARGET_COUNT) {
+                    targetsAdded = 0;
+                    long end = System.currentTimeMillis();
+                    long duration = end - start;
+
+                    post.setEnabled(true);
+                    result.setText("Responsetime: " + (duration / TARGET_COUNT) + " milliseconds for " + TARGET_COUNT + " targets");
+                }
             }
         }, new Response.ErrorListener() {
             @Override
@@ -129,6 +135,10 @@ public class MainActivity extends AppCompatActivity {
 
     public void startPost(View view) {
         post.setEnabled(false);
-        postAddTarget();
+        start = System.currentTimeMillis();
+
+        for (int i = 0; i < TARGET_COUNT; i++) {
+            postAddTarget();
+        }
     }
 }

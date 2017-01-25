@@ -1,8 +1,10 @@
 package geert.berkers.smon7experimentservertest;
 
+import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.NetworkResponse;
 import com.android.volley.ParseError;
 import com.android.volley.Response;
+import com.android.volley.RetryPolicy;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
@@ -30,6 +32,7 @@ public class AddTargetRequest extends BaseRequest {
         this.image = imageBase64;
         this.qrCode = qrCode;
         gson = new Gson();
+        setRetryPolicy(new DefaultRetryPolicy(5000, DefaultRetryPolicy.DEFAULT_MAX_RETRIES, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
     }
 
     @Override
